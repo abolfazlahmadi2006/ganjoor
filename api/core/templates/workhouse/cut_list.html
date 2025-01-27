@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cut List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .cut-details {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cut List</h1>
+    {% for cut in cuts %}
+        <div class="cut-details">
+            <h2>Cut Code: {{ cut.cut_code }}</h2>
+            <p><strong>Create Date:</strong> {{ cut.create_date }}</p>
+            <p><strong>Model:</strong> {{ cut.model_name }}</p>
+            <p><strong>Owner:</strong> {{ cut.owner }}</p>
+            <p><strong>Length of Layers:</strong> {{ cut.length_of_layers }}</p>
+            <p><strong>Sewer:</strong> {{ cut.sewer }}</p>
+        </div>
+    {% endfor %}
+</body>
+</html>

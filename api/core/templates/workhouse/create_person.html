@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Person</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        function toggleFields() {
+            var personType = document.getElementById('id_person_type').value;
+            var producerFields = document.getElementById('producer_fields');
+            var sewingWorkerFields = document.getElementById('sewing_worker_fields');
+            var cutWorkerFields = document.getElementById('cut_worker_fields');
+            
+            producerFields.classList.add('hidden');
+            sewingWorkerFields.classList.add('hidden');
+            cutWorkerFields.classList.add('hidden');
+
+            producerFields.querySelectorAll('input').forEach(function(input) {
+                input.disabled = true;
+                input.required = false;
+            });
+            sewingWorkerFields.querySelectorAll('input').forEach(function(input) {
+                input.disabled = true;
+                input.required = false;
+            });
+            cutWorkerFields.querySelectorAll('input').forEach(function(input) {
+                input.disabled = true;
+                input.required = false;
+            });
+
+            if (personType == 'producer') {
+                producerFields.classList.remove('hidden');
+                producerFields.querySelectorAll('input').forEach(function(input) {
+                    input.disabled = false;
+                    input.required = true;
+                });
+            } else if (personType == 'sewing_worker') {
+                sewingWorkerFields.classList.remove('hidden');
+                sewingWorkerFields.querySelectorAll('input').forEach(function(input) {
+                    input.disabled = false;
+                    input.required = true;
+                });
+            } else if (personType == 'cut_worker') {
+                cutWorkerFields.classList.remove('hidden');
+                cutWorkerFields.querySelectorAll('input').forEach(function(input) {
+                    input.disabled = false;
+                    input.required = true;
+                });
+            }
+        }
+
+        window.onload = function() {
+            toggleFields(); // Initial call to set the correct fields based on the default selection
+        }
+    </script>
+</head>
+<body>
+    <h1>Create Person</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ person_form.as_p }}
+        <div id="producer_fields" class="hidden">
+            {{ producer_form.as_p }}
+        </div>
+        <div id="sewing_worker_fields" class="hidden">
+            {{ sewing_worker_form.as_p }}
+        </div>
+        <div id="cut_worker_fields" class="hidden">
+            {{ cut_worker_form.as_p }}
+        </div>
+        <button type="submit">Save</button>
+    </form>
+
+    <script>
+        document.getElementById('id_person_type').addEventListener('change', toggleFields);
+    </script>
+</body>
+</html>

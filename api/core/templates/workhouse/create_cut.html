@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Create Cut</title>
+    <style>
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .form-row>div {
+            margin-right: 15px;
+        }
+
+        .formset-form {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .formset-form>div {
+            margin-right: 15px;
+        }
+
+        .formset-form .delete-checkbox {
+            align-self: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Create Cut</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-row">
+            <div>{{ cut_form.cut_code.label_tag }} {{ cut_form.cut_code }}</div>
+            <div>{{ cut_form.create_date.label_tag }} {{ cut_form.create_date }}</div>
+            <div>{{ cut_form.model_name.label_tag }} {{ cut_form.model_name }}</div>
+            <div>{{ cut_form.owner.label_tag }} {{ cut_form.owner }}</div>
+            <div>{{ cut_form.sewer.label_tag }} {{ cut_form.sewer }}</div>
+            <div>{{ cut_form.length_of_layers.label_tag }} {{ cut_form.length_of_layers }}</div>
+        </div>
+        <div class="form-row">
+            <div>{{ cut_form.model_code.label_tag }} {{ cut_form.model_code }}</div>
+            <div>{{ cut_form.lai_per_unit.label_tag }} {{ cut_form.lai_per_unit }}</div>
+            <div>{{ cut_form.product_per_layer.label_tag }} {{ cut_form.product_per_layer }}</div>
+            <div>{{ cut_form.size.label_tag }} {{ cut_form.size }}</div>
+        </div>
+        <div class="form-row">
+            <div>{{ cut_form.cutting_price.label_tag }} {{ cut_form.cutting_price }}</div>
+            <div>{{ cut_form.sewing_price.label_tag }} {{ cut_form.sewing_price }}</div>
+            <div>{{ cut_form.cutting_price_raw.label_tag }} {{ cut_form.cutting_price_raw }}</div>
+            <div>{{ cut_form.sewing_price_raw.label_tag }} {{ cut_form.sewing_price_raw }}</div>
+        </div>
+        <h2>Rolls</h2>
+        {{ roll_formset.management_form }}
+        <div id="formset-container">
+            {% for roll in roll_formset %}
+
+            <div class="formset-form">
+                <div>{{ roll.color.label_tag }} {{ roll.color }}</div>
+                <div>{{ roll.length.label_tag }} {{ roll.length }}</div>
+                <div>{{ roll.layers.label_tag }} {{ roll.layers }}</div>
+                <div>{{ roll.products.label_tag }} {{ roll.products }}</div>
+                <div>{{ roll.type_fabric.label_tag }} {{ roll.type_fabric }}</div>
+                <div class="delete-checkbox">{{ roll.DELETE }}</div>
+            </div>
+
+            {% endfor %}
+        </div>
+        <button type="button" id="add-more">Add More Rolls</button>
+        <button type="submit">Save</button>
+    </form>
+
+    <script>
+        document.getElementById('add-more').addEventListener('click', function () {
+            var formIdx = document.querySelectorAll('.formset-form').length;
+            var newForm = document.querySelector('.formset-form').cloneNode(true);
+            newForm.innerHTML = newForm.innerHTML.replace(/__prefix__/g, formIdx);
+            document.getElementById('formset-container').appendChild(newForm);
+            var deleteCheckboxes = newForm.querySelectorAll('input[type=checkbox]');
+            deleteCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+                // checkbox.parentElement.style.display = 'none';
+            });
+            console.log(newForm)
+        });
+
+        document.addEventListener('change', function (e) {
+            if (e.target.type === 'checkbox' && e.target.name.includes('DELETE')) {
+                var form = e.target.closest('.formset-form');
+                if (e.target.checked) {
+                    form.style.display = 'none';
+                } else {
+                    form.style.display = 'flex';
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Person Detail</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Person Detail</h1>
+    <div class="person-detail">
+        <p><strong>Name:</strong> {{ person.name }}</p>
+        <p><strong>Phone Number:</strong> {{ person.phone_number }}</p>
+        <p><strong>Type:</strong> {{ person.get_person_type_display }}</p>
+        
+        {% if person.person_type == 'producer' %}
+            <p><strong>Brand Name:</strong> {{ person.producer.brand_name }}</p>
+        {% elif person.person_type == 'sewing_worker' or person.person_type == 'cut_worker' %}
+            <p><strong>Payment Card Info:</strong> {{ person.worker.payment_card_info }}</p>
+        {% endif %}
+    </div>
+
+    {% if related_cuts %}
+        <h2>Related Cuts</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Cut Code</th>
+                    <th>Model</th>
+                    <th>Create Date</th>
+                    <th>Total product</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cut in related_cuts %}
+                    <tr>
+                        <td>{{ cut.cut_code }}</td>
+                        <td>{{ cut.model_name }}</td>
+                        <td>{{ cut.create_date }}</td>
+                        <td>{{ cut.total_product }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</body>
+</html>

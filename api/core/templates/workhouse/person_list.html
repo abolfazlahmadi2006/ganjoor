@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Person List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Person List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Type</th>
+                <th>Brand Name/Payment Card Info</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for person in persons %}
+                <tr>
+                    <td><a href="{% url 'person_detail' person.pk %}">{{ person.name }}</a></td>
+                    <td>{{ person.phone_number }}</td>
+                    <td>{{ person.get_person_type_display }}</td>
+                    <td>
+                        {% if person.person_type == 'producer' %}
+                            {{ person.producer.brand_name }}
+                        {% elif person.person_type == 'sewing_worker' %}
+                            {{ person.sewinghouseworker.payment_card_number }}
+                        {% elif person.person_type == 'cut_worker' %}
+                            {{ person.cuthouseworker.payment_card_number }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

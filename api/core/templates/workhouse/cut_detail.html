@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cut {{ cut.cut_code }}</title>
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid black;
+      }
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+      }
+      .cut-details {
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Cut details of {{ cut.cut_code }}</h1>
+    <div class="cut-details">
+      <h2>Cut Code: {{ cut.cut_code }}</h2>
+      <p><strong>Create Date:</strong> {{ cut.create_date }}</p>
+      <p><strong>Model:</strong> {{ cut.model }}</p>
+      <p><strong>Owner:</strong> {{ cut.owner.name }}</p>
+      <p><strong>Length of Layers:</strong> {{ cut.length_of_layers }}</p>
+      <p><strong>Sewer:</strong> {{ cut.sewer.name }}</p>
+      <h3>Rolls</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Color</th>
+            <th>Length</th>
+            <th>Layers</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for roll in rolls %}
+          <tr>
+            <td>{{ roll.color }}</td>
+            <td>{{ roll.length }}</td>
+            <td>{{ roll.layers }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
