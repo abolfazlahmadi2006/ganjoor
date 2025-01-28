@@ -5,6 +5,7 @@ import { EllipsisHorizontalCircleIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 
 const CutCreate = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [producers, setProducers] = useState([]);
   const [cutData, setCutData] = useState({
     cut_code: "",
@@ -39,7 +40,7 @@ const CutCreate = () => {
     const fetchProducers = async () => {
       try {
         const response = await axios.get(
-          "http://192.168.1.8:8000/api/producer-list/"
+          `${API_BASE_URL}producer-list/`
         );
         setProducers(response.data.results || []);
       } catch (error) {
@@ -98,7 +99,7 @@ const CutCreate = () => {
 
     try {
       const response = await axios.post(
-        "http://192.168.1.8:8000/api/cut-create-drf/",
+        `${API_BASE_URL}cut-create-drf/`,
         dataToSend,
         {
           headers: {

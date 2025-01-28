@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-+*1e6+^et8ihd3$z8e$%cwmeb9j=0)+(i(n=+bb5aeacox1pf_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['37.32.5.114']
 
 
 # Application definition
@@ -130,18 +130,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-# CORS_ALLOWES_ORIGINS = [
-    # 'http://localhost:3000',
-    # 'http://192.168.1.9:3000',
-    # 'http://127.0.0.1:5173'
-# ]
+ #CORS_ALLOWES_ORIGINS = [
+ #    'http://37.32.5.114'
+ #]
 
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',
-    'http://192.168.1.9:3000',
-    'http://127.0.0.1:5173'
+    'http://37.32.5.114',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',

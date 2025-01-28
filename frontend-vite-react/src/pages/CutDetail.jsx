@@ -4,6 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { numberToPersian } from "../utils/numberToPersian";
 
 const CutDetail = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const { cutId } = useParams();
   const [cut, setCut] = useState(null);
 
@@ -11,7 +12,7 @@ const CutDetail = () => {
     const fetchCutDetail = async () => {
       try {
         const response = await axios.get(
-          `http://192.168.1.8:8000/api/cut-detail/${cutId}/`
+          `${API_BASE_URL}cut-detail/${cutId}/`
         );
         setCut(response.data);
       } catch (error) {

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { numberToPersian } from "../utils/numberToPersian";
 
 const CutList = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [cuts, setCuts] = useState([]);
   const [owners, setOwners] = useState([]);
   const [selectedOwner, setSelectedOwner] = useState("");
@@ -14,7 +15,7 @@ const CutList = () => {
     const fetchCuts = async (owner = "", page = 1) => {
       try {
         const response = await axios.get(
-          `http://192.168.1.8:8000/api/cut-list/?owner__person__name=${owner}&page=${page}`
+          `${API_BASE_URL}cut-list/?owner__person__name=${owner}&page=${page}`
         );
         setCuts(response.data.results || []);
         setTotalPages(Math.ceil(response.data.count / 10)); // Assuming page size is 10
@@ -26,7 +27,7 @@ const CutList = () => {
     const fetchOwners = async () => {
       try {
         const response = await axios.get(
-          "http://192.168.1.8:8000/api/producer-list/"
+          `${API_BASE_URL}producer-list/`
         );
         console.log("Owners API response:", response.data); // Debugging log
         setOwners(response.data.results || []);
