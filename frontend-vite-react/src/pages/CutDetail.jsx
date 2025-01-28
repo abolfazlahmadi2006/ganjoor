@@ -11,9 +11,7 @@ const CutDetail = () => {
   useEffect(() => {
     const fetchCutDetail = async () => {
       try {
-        const response = await axios.get(
-          `${API_BASE_URL}cut-detail/${cutId}/`
-        );
+        const response = await axios.get(`${API_BASE_URL}cut-detail/${cutId}/`);
         setCut(response.data);
       } catch (error) {
         console.error("Error fetching cut detail:", error);
@@ -31,7 +29,7 @@ const CutDetail = () => {
     <div>
       <h2>جزئیات برش</h2>
       <div className="flex justify-center md:p-0">
-        <div className="relative md:w-5/6 w-full overflow-x-auto rounded-lg border dark:border-gray-700 border-gray-300">
+        <div className="relative w-full overflow-x-auto rounded-lg border dark:border-gray-700 border-gray-300">
           <div className="p-4">
             <h3>کد برش: {cut.cut_code}</h3>
             <p>تاریخ: {numberToPersian(cut.create_date)}</p>

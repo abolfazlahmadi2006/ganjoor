@@ -1,28 +1,25 @@
 import React from "react";
-import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import CutCreateForm from "./pages/CutCreate";
-import CutList from "./pages/CutList";
-import CutDetail from "./pages/CutDetail";
-import PageNotFound from "./pages/PageNotFound";
-import "./App.css";
 import {
   createBrowserRouter,
   RouterProvider,
   Route,
   Outlet,
 } from "react-router-dom";
+import Home from "./pages/Home";
+import CutCreateForm from "./pages/CutCreate";
+import CutList from "./pages/CutList";
+import CutDetail from "./pages/CutDetail";
+import PageNotFound from "./pages/PageNotFound";
+import Layout from "./components/Layout";
+import "./App.css";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <>
-        <Navbar />
-        <div className="container mx-auto">
-          <Outlet />
-        </div>
-      </>
+      <Layout>
+        <Outlet />
+      </Layout>
     ),
     children: [
       { path: "/", element: <Home /> },

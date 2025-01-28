@@ -5,7 +5,7 @@
 
 body {
   font-family: "IBM Plex Sans Arabic", serif;
-  @apply bg-neutral-100 dark:bg-gray-900 dark:text-white;
+  @apply bg-gray-100 dark:bg-gray-900 dark:text-white;
 }
 
 .yoyo {

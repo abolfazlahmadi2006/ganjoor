@@ -39,9 +39,7 @@ const CutCreate = () => {
   useEffect(() => {
     const fetchProducers = async () => {
       try {
-        const response = await axios.get(
-          `${API_BASE_URL}producer-list/`
-        );
+        const response = await axios.get(`${API_BASE_URL}producer-list/`);
         setProducers(response.data.results || []);
       } catch (error) {
         console.error("Error fetching producers:", error);
@@ -127,13 +125,13 @@ const CutCreate = () => {
   );
 
   return (
-    <form className="vazirmatn-regular w-full px-2" onSubmit={handleSubmit}>
+    <form className="w-full" onSubmit={handleSubmit}>
       <h2 className="text-center mt-3 mb-5 text-xl font-bold">
         ایجاد اطلاعات برش
       </h2>
       {/* Input fields for Cut Data */}
-      <div className="flex justify-center">
-        <div className="md:w-5/6 sm:w-full grid gap-2 grid-cols-3">
+      <div className="flex w-full justify-center">
+        <div className="w-full grid gap-2 grid-cols-3">
           <input
             type="text"
             maxLength="4"
@@ -229,7 +227,7 @@ const CutCreate = () => {
         طاقه جدید
       </button>
       <div className="flex justify-center md:p-0">
-        <div className="relative md:w-5/6 w-full overflow-x-auto rounded-lg border dark:border-gray-700 border-gray-300">
+        <div className="relative w-full overflow-x-auto rounded-lg border dark:border-gray-700 border-gray-300">
           <table className="w-full justify-self-center text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="border-b dark:border-gray-700 text-gray-700 uppercase bg-stone-100  dark:bg-gray-700 dark:text-gray-400">
               <tr>
