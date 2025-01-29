@@ -1,9 +1,5 @@
 from django.db import models
 
-from queryable_properties.properties import queryable_property
-
-
-
 class Person(models.Model):
     PERSON_TYPES = [
         ('producer', 'Producer'),
