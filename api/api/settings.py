@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-+*1e6+^et8ihd3$z8e$%cwmeb9j=0)+(i(n=+bb5aeacox1pf_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['37.32.5.114', 'localhost']
+ALLOWED_HOSTS = ['37.32.5.114', 'localhost', "192.168.1.9"]
 
 
 # Application definition
@@ -142,5 +142,10 @@ CORS_ORIGIN_WHITELIST = [
 ]
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.OrderingFilter', 
+        'rest_framework.filters.SearchFilter'
+        ],
 }

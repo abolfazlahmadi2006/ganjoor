@@ -1,10 +1,13 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import generics
+from rest_framework import generics, status, pagination
 from django_filters.rest_framework import DjangoFilterBackend
-from .serializers import CutSerializer, CutListSerializer, ProducerSerializer, CutDetailSerializer
-from rest_framework import status
-from .models import Cut, Roll, Producer, SewingHouseWorker
+from .serializers import CutUpdateSerializer, CutSerializer, CutListSerializer, ProducerSerializer, CutDetailSerializer
+from .models import Cut, Producer
+from rest_framework.filters import SearchFilter, OrderingFilter
+from jdatetime import datetime as jdatetime
+from datetime import datetime
+from django.db.models import F, DateField
 
 
 class CutCreateView(APIView):
@@ -20,12 +23,21 @@ class CutCreateView(APIView):
     def get(self, request):
         return Response({"message": "GET method not allowed for this endpoint."}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
         
+class CutPagination(pagination.PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+ 
 class CutListView(generics.ListAPIView):
     queryset = Cut.objects.all().select_related('owner')
     serializer_class = CutListSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     filterset_fields = ['owner__person__name']
-    # pagination_class = PageNumberPagination   # Use default pagination class from settings
+    search_fields = ['cut_code', 'model_name']
+    ordering_fields = ['create_date_gregorian']
+    ordering = ['-create_date_gregorian']
+    pagination_class = CutPagination
 
 
 class ProducerListView(generics.ListAPIView):
@@ -33,8 +45,11 @@ class ProducerListView(generics.ListAPIView):
     serializer_class = ProducerSerializer
     # pagination_class = PageNumberPagination   # Use default pagination class from settings
 
-class CutDetailView(generics.RetrieveUpdateDestroyAPIView):
+class CutDetailView(generics.RetrieveDestroyAPIView):
     queryset = Cut.objects.all().select_related('owner').prefetch_related('rolls')
-    print(queryset)
     serializer_class = CutDetailSerializer
+
+class CutUpdateView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Cut.objects.all().select_related('owner').prefetch_related('rolls')
+    serializer_class = CutUpdateSerializer
     

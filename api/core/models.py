@@ -1,5 +1,8 @@
 from django.db import models
 
+from queryable_properties.properties import queryable_property
+
+
 
 class Person(models.Model):
     PERSON_TYPES = [
@@ -50,6 +53,7 @@ class Sizes(models.TextChoices):
 class Cut(models.Model): 
     cut_code = models.CharField(max_length=100, primary_key=True)
     create_date = models.CharField(max_length=10, blank=True, null=True)
+    create_date_gregorian = models.DateField(blank=True, null=True)
     owner = models.ForeignKey(Producer, on_delete=models.CASCADE, blank=True, null=True)
     sewer = models.ForeignKey('SewingHouseWorker', on_delete=models.SET_NULL, null=True, related_name='cuts', blank=True)
     model_name = models.CharField(max_length=100, blank=True, null=True)
@@ -87,6 +91,8 @@ class Cut(models.Model):
     def total_margin(self):
         return self.cut_margin + self.sew_margin
     
+    class Mete:
+        ordering = ['create_date_gregorian']
 
     
 class Roll(models.Model):
