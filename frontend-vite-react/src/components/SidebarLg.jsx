@@ -7,6 +7,12 @@ import {
   PlusIcon,
   BanknotesIcon,
   ListBulletIcon,
+  UserGroupIcon,
+  UserPlusIcon,
+  UserCircleIcon,
+  CurrencyDollarIcon,
+  CreditCardIcon,
+  DocumentCurrencyDollarIcon,
 } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
 
@@ -18,6 +24,22 @@ const navigation = [
     subparts: [
       { name: "ایجاد برش", href: "/cut-create", icon: PlusIcon },
       { name: "لیست برش‌ها", href: "/cut-list", icon: ListBulletIcon },
+    ],
+  },
+  {
+    name: "پرسنل",
+    icon: UserCircleIcon,
+    subparts: [
+      { name: "استخدادم نیرو جدید", href: "#", icon: UserPlusIcon },
+      { name: "لیست لیست", href: "#", icon: UserGroupIcon },
+    ],
+  },
+  {
+    name: "امور مالی",
+    icon: CurrencyDollarIcon,
+    subparts: [
+      { name: "لیست شماره کارت‌ها", href: "#", icon: CreditCardIcon },
+      { name: "لیست قبوض", href: "#", icon: DocumentCurrencyDollarIcon },
     ],
   },
 ];
@@ -50,7 +72,7 @@ export default function SidebarLg() {
   };
 
   return (
-    <div className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 bg-white dark:bg-gray-800">
+    <div className="whitespace-nowrap fixed h-screen p-4 w-2/6 md:w-1/4 xl:w-1/6 shadow-xl shadow-blue-gray-900/5 bg-white dark:bg-gray-800">
       <div className="mb-2 flex items-center gap-4 p-4">
         <BanknotesIcon className="h-8" />
         <h5 className="text-lg font-semibold text-gray-900 dark:text-white">

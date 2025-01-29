@@ -30,7 +30,7 @@ input {
 }
 
 td {
-  @apply px-1;
+  @apply p-2;
 }
 
 th {

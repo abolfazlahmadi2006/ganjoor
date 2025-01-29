@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { EllipsisHorizontalCircleIcon } from "@heroicons/react/24/outline";
-import { useNavigate } from "react-router-dom";
 
-const CutCreate = () => {
+const CutUpdate = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const { cutId } = useParams();
   const [producers, setProducers] = useState([]);
   const [cutData, setCutData] = useState({
     cut_code: "",
@@ -46,8 +47,19 @@ const CutCreate = () => {
       }
     };
 
+    const fetchCutDetail = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}cut-detail/${cutId}/`);
+        setCutData(response.data);
+        setRolls(response.data.rolls);
+      } catch (error) {
+        console.error("Error fetching cut detail:", error);
+      }
+    };
+
     fetchProducers();
-  }, []);
+    fetchCutDetail();
+  }, [cutId]);
 
   const handleProducerChange = (e) => {
     setCutData({ ...cutData, owner: e.target.value });
@@ -96,8 +108,8 @@ const CutCreate = () => {
     console.log("Data to Send:", dataToSend);
 
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}cut-create-drf/`,
+      const response = await axios.put(
+        `${API_BASE_URL}cut-update/${cutId}/`,
         dataToSend,
         {
           headers: {
@@ -127,7 +139,7 @@ const CutCreate = () => {
   return (
     <form className="w-full" onSubmit={handleSubmit}>
       <h2 className="text-center mt-3 mb-5 text-xl font-bold">
-        ایجاد اطلاعات برش
+        ویرایش اطلاعات برش
       </h2>
       {/* Input fields for Cut Data */}
       <div className="flex w-full justify-center">
@@ -309,7 +321,7 @@ const CutCreate = () => {
                 </td>
                 <td className="w-10 border-0">
                   <Menu as="div" className="relative">
-                    <MenuItems className="absolute left-0 top-0 ml-10 w-48 origin-top-right rounded-lg bg-white dark:bg-gray-600 border dark:border-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none">
+                    <MenuItems className="absolute left-0 top-0 z-10 ml-10 w-48 origin-top-right rounded-lg bg-white dark:bg-gray-600 border dark:border-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none">
                       <div className="py-1">
                         <MenuItem>
                           <button
@@ -354,4 +366,4 @@ const CutCreate = () => {
   );
 };
 
-export default CutCreate;
+export default CutUpdate;

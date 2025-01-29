@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import {
+  EllipsisHorizontalIcon,
+  ArrowDownIcon,
+  ArrowUpIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
 import { numberToPersian } from "../utils/numberToPersian";
 
 const CutList = () => {
@@ -10,12 +17,17 @@ const CutList = () => {
   const [selectedOwner, setSelectedOwner] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
+  const [sortOrder, setSortOrder] = useState("dest");
+  const [searchQuery, setSearchQuery] = useState("");
   useEffect(() => {
-    const fetchCuts = async (owner = "", page = 1) => {
+    const fetchCuts = async (owner = "", page = 1, query = "") => {
       try {
+        const order =
+          sortOrder === "asc"
+            ? "create_date_gregorian"
+            : "-create_date_gregorian";
         const response = await axios.get(
-          `${API_BASE_URL}cut-list/?owner__person__name=${owner}&page=${page}`
+          `${API_BASE_URL}cut-list/?owner__person__name=${owner}&page=${page}&ordering=${order}&search=${query}`
         );
         setCuts(response.data.results || []);
         setTotalPages(Math.ceil(response.data.count / 10)); // Assuming page size is 10
@@ -26,19 +38,20 @@ const CutList = () => {
 
     const fetchOwners = async () => {
       try {
-        const response = await axios.get(
-          `${API_BASE_URL}producer-list/`
-        );
-        console.log("Owners API response:", response.data); // Debugging log
+        const response = await axios.get(`${API_BASE_URL}producer-list/`);
         setOwners(response.data.results || []);
       } catch (error) {
         console.error("Error fetching owners:", error);
       }
     };
 
-    fetchCuts(selectedOwner, currentPage);
+    fetchCuts(selectedOwner, currentPage, searchQuery);
     fetchOwners();
-  }, [selectedOwner, currentPage]);
+  }, [selectedOwner, currentPage, sortOrder, searchQuery]);
+
+  const toggleSortOrder = () => {
+    setSortOrder(sortOrder === "asc" ? "dest" : "asc");
+  };
 
   const handleOwnerChange = (e) => {
     setSelectedOwner(e.target.value);
@@ -51,46 +64,66 @@ const CutList = () => {
 
   return (
     <div className="px-3 space-y-3">
-      <h2>لیست برش‌ها</h2>
-      <div>
-        <label
-          htmlFor="owner"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-        >
-          Filter by Owner:
-        </label>
-        <select
-          id="owner"
-          name="owner"
-          value={selectedOwner}
-          onChange={handleOwnerChange}
-          className="mt-1 block w-full py-2 text-base dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-        >
-          <option value="">همه</option>
-          {Array.isArray(owners) &&
-            owners.map((owner) => (
-              <option key={owner.id} value={owner.name}>
-                {owner.name}
-              </option>
-            ))}
-        </select>
+      <div className="flex h-10">
+        <div className="rounded-tr-md rounded-br-md p-2 bg-gray-200 border-[1px] border-l-0 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white border-gray-300">
+          <MagnifyingGlassIcon className="h-full w-6" />
+        </div>
+        <input
+          type="text"
+          placeholder="جستوجو در مدل‌ها و کدبرش‌ها"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className=" rounded-none h-full text-sm"
+        />
+        <div>
+          <select
+            id="owner"
+            name="owner"
+            value={selectedOwner}
+            onChange={handleOwnerChange}
+            className=" h-full text-center rounded-tr-none border-[1px] border-r-0 rounded-br-none text-base dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+          >
+            <option value="">همه تولیدکنندگان</option>
+            {Array.isArray(owners) &&
+              owners.map((owner) => (
+                <option key={owner.id} value={owner.name}>
+                  {owner.name}
+                </option>
+              ))}
+          </select>
+        </div>
       </div>
-      <div className="flex justify-center">
-        <div className="relative w-full overflow-x-auto rounded-lg border dark:border-gray-700 border-gray-300">
+
+      <h2>لیست برش‌ها</h2>
+
+      <div className="flex w-full justify-center ">
+        <div className="relative w-full overflow-x-auto z-0 overflow-y-hidden rounded-lg border dark:border-gray-700 border-gray-300">
           {/* outer box border */}
 
           <table className="w-full justify-self-center text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="border-b dark:border-gray-700 text-gray-700 uppercase bg-stone-100 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col"></th>
-                <th scope="col">کد</th>
-                <th scope="col">تاریخ</th>
                 <th scope="col">مدل</th>
-                <th scope="col">تولیدکننده</th>
-                <th scope="col" className="whitespace-nowrap">
+                <th scope="col" className="text-center">
+                  کد
+                </th>
+                <th scope="col" className="flex whitespace-nowrap ">
+                  <div className="ml-1"> تاریخ</div>
+                  <button onClick={toggleSortOrder}>
+                    {sortOrder === "asc" ? (
+                      <ArrowDownIcon className="h-full" />
+                    ) : (
+                      <ArrowUpIcon className="h-full" />
+                    )}
+                  </button>
+                </th>
+                <th scope="col" className="text-center">
+                  تولیدکننده
+                </th>
+                <th scope="col" className="whitespace-nowrap text-center">
                   تعداد طاقه‌ها
                 </th>
-                <th scope="col" className="border-l-0"></th>
               </tr>
             </thead>
             <tbody>
@@ -106,24 +139,22 @@ const CutList = () => {
                   <td className="text-center py-2 px-3 w-1 border-l dark:border-gray-700 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     {numberToPersian(index + 1)}
                   </td>
+                  <td className="whitespace-nowrap">{cut.model_name}</td>
                   <td className="text-center whitespace-nowrap">
-                    {cut.cut_code}
+                    <button
+                      onClick={() =>
+                        window.open(`/cut-detail/${cut.cut_code}`, "_blank")
+                      }
+                    >
+                      {cut.cut_code}
+                    </button>
                   </td>
-                  <td className="text-center whitespace-nowrap">
+                  <td className="whitespace-nowrap">
                     {numberToPersian(cut.create_date)}
                   </td>
-                  <td className="whitespace-nowrap">{cut.model_name}</td>
                   <td className="text-center whitespace-nowrap">{cut.owner}</td>
                   <td className="text-center w-24 whitespace-nowrap">
                     {numberToPersian(cut.number_of_rolls)}
-                  </td>
-                  <td className="text-center border-l-0">
-                    <Link
-                      to={`/cut-detail/${cut.cut_code}`}
-                      className="text-indigo-600 hover:text-indigo-900"
-                    >
-                      Edit
-                    </Link>
                   </td>
                 </tr>
               ))}
