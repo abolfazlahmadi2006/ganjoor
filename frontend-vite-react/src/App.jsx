@@ -12,6 +12,9 @@ import CutDetail from "./pages/CutDetail";
 import CutUpdate from "./pages/CutUpdate";
 import PageNotFound from "./pages/PageNotFound";
 import Layout from "./components/Layout";
+import AuthPage from "./pages/AuthPage";
+import { UserProvider } from "./pages/UserContext";
+import LogoutPage from "./pages/LogoutPage";
 import "./App.css";
 
 const router = createBrowserRouter([
@@ -28,13 +31,19 @@ const router = createBrowserRouter([
       { path: "/cut-detail/:cutId", element: <CutDetail /> },
       { path: "/cut-update/:cutId", element: <CutUpdate /> },
       { path: "/cut-list", element: <CutList /> },
+      { path: "/login", element: <AuthPage /> },
+      { path: "/logout", element: <LogoutPage /> },
       { path: "*", element: <PageNotFound /> },
     ],
   },
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <UserProvider>
+      <RouterProvider router={router} />
+    </UserProvider>
+  );
 }
 
 export default App;

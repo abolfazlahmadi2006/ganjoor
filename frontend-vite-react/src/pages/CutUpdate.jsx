@@ -224,6 +224,22 @@ const CutUpdate = () => {
             value={cutData.length_of_layers}
             onChange={handleCutChange}
           />
+
+          <input
+            type="text"
+            name="cutting_price"
+            placeholder="قیمت برش"
+            value={cutData.cutting_price}
+            onChange={handleCutChange}
+          />
+
+          <input
+            type="text"
+            name="cutting_price_raw"
+            placeholder="قیمت برش خام"
+            value={cutData.cutting_price_raw}
+            onChange={handleCutChange}
+          />
         </div>
       </div>
       {/* cutting_price */}
@@ -352,6 +368,20 @@ const CutUpdate = () => {
               <td></td>
               <td className="text-center">{totalLayers}</td>
               <td className="text-center">{totalProducts}</td>
+              <td></td>
+              <td className="w-10 border-0"></td>
+            </tr>
+            <tr
+              className="even:bg-white odd:dark:bg-gray-900 odd:bg-stone-100 even:dark:bg-gray-800 "
+              key="total"
+            >
+              <th className="text-center py-3 w-1 border-l dark:border-gray-700 font-medium text-gray-900 whitespace-nowrap dark:text-white"></th>
+              <td>
+                <p className="py-1.5">مبلغ کل</p>
+              </td>
+              <td></td>
+              <td className="text-center">{cutData.cut_margin}</td>
+              <td className="text-center">{cutData.cutting_price}</td>
               <td></td>
               <td className="w-10 border-0"></td>
             </tr>

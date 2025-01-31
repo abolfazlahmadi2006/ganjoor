@@ -66,6 +66,7 @@ class Cut(models.Model):
     def __str__(self) -> str:
         return self.cut_code
     
+    @property
     def total_product(self):
         number = 0
         rolls = Roll.objects.filter(cut=self.cut_code)
@@ -73,19 +74,29 @@ class Cut(models.Model):
             number += roll.products
         return number
     
-    def roll_set(self):
+    @property
+    def rolls(self):
         return Roll.objects.filter(cut=self.cut_code)
     
+    @property
     def cut_margin(self):
-        cm = (self.cutting_price_raw - self.cutting_price) * self.total_product
-        return cm
+        if self.cutting_price_raw is None or self.cutting_price is None:
+            return 0
+        return (self.cutting_price_raw - self.cutting_price) * self.total_product
     
+    @property
     def sew_margin(self):
-        sm = (self.sewing_price_raw - self.sewing_price) * self.total_product
-        return sm
+        if self.sewing_price_raw is None or self.sewing_price is None:
+            return 0
+        return (self.sewing_price_raw - self.sewing_price) * self.total_product
     
+    @property
     def total_margin(self):
-        return self.cut_margin + self.sew_margin
+        cut_margin = self.cut_margin
+        sew_margin = self.sew_margin
+        print(f"cut_margin: {cut_margin}, sew_margin: {sew_margin}")
+        return cut_margin + sew_margin
+
     
     class Mete:
         ordering = ['create_date_gregorian']
@@ -103,5 +114,3 @@ class Roll(models.Model):
 
     def __str__(self) -> str:
         return f'{self.color} - {self.length} - {self.cut.cut_code}'
-
-

@@ -10,3 +10,12 @@ export const numberToPersian = (num) => {
     })
     .join("");
 };
+
+export function moneyFormat(number) {
+  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+  const formattedNumber = (number * 1000)
+    .toLocaleString()
+    .toString()
+    .replace(/\d/g, (digit) => persianDigits[digit]);
+  return formattedNumber + " تومان";
+}

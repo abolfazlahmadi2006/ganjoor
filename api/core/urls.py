@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CutUpdateView, CutCreateView, ProducerListView, CutListView, CutDetailView
+from .views import CutUpdateView, CutCreateView, ProducerListView, CutListView, CutDetailView, register_user, get_user_info, login_user
 from .views_func import create_person, create_cut, person_list, cut_list, cut_detail, person_detail
 
 views_func_urlpatterns = [
@@ -17,7 +17,9 @@ urlpatterns = [
     path('producer-list/', ProducerListView.as_view(), name='producer-list'),
     path('cut-detail/<str:pk>/', CutDetailView.as_view(), name='cut-detail'),
     path('cut-update/<str:pk>/', CutUpdateView.as_view(), name='cut-update'),
-
+    path('register/', register_user, name='register'),
+    path('login/', login_user, name='login'),
+    path('user_info/', get_user_info, name='user-info'),
     
 ] + views_func_urlpatterns
 

@@ -1,15 +1,23 @@
 import React, { useState } from "react";
 import { Disclosure } from "@headlessui/react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useUser } from "../pages/UserContext";
+
 import {
-  Bars3Icon,
-  XMarkIcon,
-  BanknotesIcon,
+  ChevronDownIcon,
   HomeIcon,
   ScissorsIcon,
-  ChevronDownIcon,
   PlusIcon,
+  BanknotesIcon,
   ListBulletIcon,
+  UserGroupIcon,
+  UserPlusIcon,
+  UserCircleIcon,
+  CurrencyDollarIcon,
+  CreditCardIcon,
+  DocumentCurrencyDollarIcon,
+  Bars3Icon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
 
@@ -24,6 +32,22 @@ const navigation = [
       { name: "لیست برش‌ها", href: "/cut-list", icon: ListBulletIcon },
     ],
   },
+  {
+    name: "پرسنل",
+    icon: UserCircleIcon,
+    subparts: [
+      { name: "استخدادم نیرو جدید", href: "#", icon: UserPlusIcon },
+      { name: "لیست پرسنل", href: "#", icon: UserGroupIcon },
+    ],
+  },
+  {
+    name: "امور مالی",
+    icon: CurrencyDollarIcon,
+    subparts: [
+      { name: "لیست شماره کارت‌ها", href: "#", icon: CreditCardIcon },
+      { name: "لیست قبوض", href: "#", icon: DocumentCurrencyDollarIcon },
+    ],
+  },
 ];
 
 // Utility function for conditional class names
@@ -34,6 +58,7 @@ function classNames(...classes) {
 export default function SidebarSm() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const { user } = useUser();
 
   return (
     <>
@@ -87,71 +112,89 @@ export default function SidebarSm() {
               </div>
 
               {/* Navigation List */}
-              <ul className="px-4 space-y-2 font-medium">
-                {navigation.map((item) =>
-                  item.subparts ? (
-                    <Disclosure key={item.name}>
-                      {({ open }) => (
-                        <>
-                          <Disclosure.Button className="flex items-center justify-between w-full p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <item.icon className="h-5 ml-2" />
-                            <span className="ml-auto">{item.name}</span>
-                            <ChevronDownIcon
-                              className={`h-5 transition-transform ${
-                                open ? "rotate-180" : ""
-                              }`}
-                            />
-                          </Disclosure.Button>
+              <div className="grid grid-cols-1 h-screen w-full overflow-y-auto">
+                <ul className="px-4 space-y-2 font-medium w-full">
+                  {navigation.map((item) =>
+                    item.subparts ? (
+                      <Disclosure key={item.name}>
+                        {({ open }) => (
+                          <>
+                            <Disclosure.Button className="flex items-center justify-between w-full p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                              <item.icon className="h-5 ml-2" />
+                              <span className="ml-auto">{item.name}</span>
+                              <ChevronDownIcon
+                                className={`h-5 transition-transform ${
+                                  open ? "rotate-180" : ""
+                                }`}
+                              />
+                            </Disclosure.Button>
 
-                          <AnimatePresence>
-                            {open && (
-                              <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: "auto" }}
-                                exit={{ opacity: 0, height: 0 }}
-                                transition={{ duration: 0.3 }}
-                              >
-                                <Disclosure.Panel className="space-y-1 mr-5">
-                                  {item.subparts.map((subitem) => (
-                                    <Link
-                                      key={subitem.name}
-                                      to={subitem.href}
-                                      className={classNames(
-                                        "flex p-2 pl-8 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700",
-                                        location.pathname === subitem.href
-                                          ? "bg-gray-200 dark:bg-gray-700"
-                                          : ""
-                                      )}
-                                    >
-                                      <subitem.icon className="h-5 ml-2" />
-                                      {subitem.name}
-                                    </Link>
-                                  ))}
-                                </Disclosure.Panel>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </>
-                      )}
-                    </Disclosure>
-                  ) : (
-                    <li key={item.name}>
-                      <Link
-                        to={item.href}
-                        className={classNames(
-                          "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700",
-                          location.pathname === item.href
-                            ? "bg-gray-200 dark:bg-gray-700"
-                            : ""
+                            <AnimatePresence>
+                              {open && (
+                                <motion.div
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: "auto" }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  transition={{ duration: 0.3 }}
+                                >
+                                  <Disclosure.Panel className="space-y-1 mr-5">
+                                    {item.subparts.map((subitem) => (
+                                      <Link
+                                        key={subitem.name}
+                                        to={subitem.href}
+                                        className={classNames(
+                                          "flex p-2 pl-8 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700",
+                                          location.pathname === subitem.href
+                                            ? "bg-gray-200 dark:bg-gray-700"
+                                            : ""
+                                        )}
+                                      >
+                                        <subitem.icon className="h-5 ml-2" />
+                                        {subitem.name}
+                                      </Link>
+                                    ))}
+                                  </Disclosure.Panel>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </>
                         )}
-                      >
-                        <item.icon className="h-5 ml-2" />
-                        {item.name}
-                      </Link>
-                    </li>
-                  )
+                      </Disclosure>
+                    ) : (
+                      <li key={item.name}>
+                        <Link
+                          to={item.href}
+                          className={classNames(
+                            "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700",
+                            location.pathname === item.href
+                              ? "bg-gray-200 dark:bg-gray-700"
+                              : ""
+                          )}
+                        >
+                          <item.icon className="h-5 ml-2" />
+                          {item.name}
+                        </Link>
+                      </li>
+                    )
+                  )}
+                </ul>
+                {!user && (
+                  <Link
+                    to="/login/"
+                    className="self-end border-[1px] mx-4 border-gray-200 items-center justify-between p-2 text-gray-900 rounded-lg dark:text-white bg-gray-100 dark:bg-gray-700"
+                  >
+                    وارد شوید
+                  </Link>
                 )}
-              </ul>
+                {user && (
+                  <div
+                    to="/login/"
+                    className="self-end border-[1px] mx-4 border-gray-200 items-center justify-between p-2 text-gray-900 rounded-lg dark:text-white bg-gray-100 dark:bg-gray-700"
+                  >
+                    {user.username}
+                  </div>
+                )}
+              </div>
             </motion.div>
           </>
         )}

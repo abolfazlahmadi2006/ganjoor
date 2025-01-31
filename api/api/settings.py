@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',
     'corsheaders',
     'core',
     'workshop',
@@ -130,16 +131,30 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
- #CORS_ALLOWES_ORIGINS = [
- #    'http://37.32.5.114'
- #]
-
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = True  # Enable session-based authentication
 
 CORS_ORIGIN_WHITELIST = [
     'http://37.32.5.114',
     'http://localhost',
+    'http://192.168.1.9:5173',
 ]
+
+CORS_ALLOW_HEADERS = [
+    "content-type",
+    "authorization",  # Add this line to allow the Authorization header
+    "x-requested-with",
+    "accept",
+    "origin",
+    "user-agent",
+    "referer",
+    "sec-fetch-mode",
+    "sec-fetch-site",
+    "sec-fetch-dest",
+    "sec-fetch-user",
+    "cache-control",
+    "pragma",
+]
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
@@ -148,4 +163,11 @@ REST_FRAMEWORK = {
         'rest_framework.filters.OrderingFilter', 
         'rest_framework.filters.SearchFilter'
         ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
 }
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]

@@ -1,7 +1,9 @@
-import React from "react";
+import { React } from "react";
+import { useUser } from "./UserContext";
 
 const Home = () => {
-  return <div>Home</div>;
+  const { user } = useUser();
+  return <h1>{user ? `خوش‌آمدید ${user.username}` : "خوش‌آمدید"}</h1>;
 };
 
 export default Home;

@@ -15,12 +15,35 @@ class CutDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cut
-        fields = '__all__'
+        fields = [
+            "cut_code",
+            "create_date",
+            "create_date_gregorian",
+            "owner",
+            "sewer",
+            "model_name",
+            "model_code",
+            "lai_per_unit",
+            "product_per_layer",
+            "size",
+            "length_of_layers",
+            "cutting_price",
+            "sewing_price",
+            "cutting_price_raw",
+            "sewing_price_raw",
+            "total_product",
+            # "roll_set",
+            "cut_margin",
+            "sew_margin",
+            "total_margin",
+            "rolls",
+            "number_of_rolls"
+        ]
         extra_fields = ['number_of_rolls']
 
     def get_number_of_rolls(self, obj):
         return obj.rolls.count()
-
+    
 class CutUpdateSerializer(serializers.ModelSerializer):
     rolls = RollSerializer(many=True)
     owner = serializers.StringRelatedField()
