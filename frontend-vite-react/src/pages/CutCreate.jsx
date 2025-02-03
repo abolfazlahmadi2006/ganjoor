@@ -83,7 +83,7 @@ const CutCreate = () => {
     // Validate and format the data
     const formattedRolls = rolls.map((roll) => ({
       ...roll,
-      products: parseInt(roll.products, 10),
+      products: roll.products || roll.layers * cutData.product_per_layer,
       length: parseFloat(roll.length),
       layers: parseInt(roll.layers, 10),
     }));
