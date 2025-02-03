@@ -107,7 +107,7 @@ class Roll(models.Model):
     color = models.CharField(max_length=50, null=True)
     length = models.FloatField(null=True)
     layers = models.FloatField(null=True)
-    products = models.PositiveSmallIntegerField(null=True)
+    products = models.PositiveSmallIntegerField(default=0)
     type_fabric = models.CharField(max_length=128, blank=True, null=True)
     description = models.CharField(max_length=128, blank=True, null=True)
 
