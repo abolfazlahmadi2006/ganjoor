@@ -26,8 +26,6 @@ def create_cut(request):
 def cut_detail(request, cut_code):
     cut = get_object_or_404(Cut, cut_code=cut_code)
     rolls = cut.rolls.all()
-    for roll in rolls:
-        print(f"\n\n{roll}\n\n")
     return render(request, 'workhouse/cut_detail.html', {'cut': cut, 'rolls': rolls})
 
 def person_list(request):

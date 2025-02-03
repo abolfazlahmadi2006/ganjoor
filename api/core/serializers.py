@@ -37,7 +37,8 @@ class CutDetailSerializer(serializers.ModelSerializer):
             "sew_margin",
             "total_margin",
             "rolls",
-            "number_of_rolls"
+            "number_of_rolls",
+            "owner_name"
         ]
         extra_fields = ['number_of_rolls']
 
@@ -46,7 +47,7 @@ class CutDetailSerializer(serializers.ModelSerializer):
     
 class CutUpdateSerializer(serializers.ModelSerializer):
     rolls = RollSerializer(many=True)
-    owner = serializers.StringRelatedField()
+    owner = serializers.PrimaryKeyRelatedField(queryset=Producer.objects.all())
     number_of_rolls = serializers.SerializerMethodField()
 
     class Meta:
@@ -137,7 +138,8 @@ class CutListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cut
-        fields = ['cut_code', 'create_date', 'model_name', 'owner', 'number_of_rolls', 'create_date_gregorian']
+        fields = ['cut_code', 'create_date', 'model_name', 'owner', 'number_of_rolls', 'create_date_gregorian', "owner_name"
+]
 
     def get_number_of_rolls(self, obj):
         return obj.rolls.count()
@@ -149,4 +151,4 @@ class ProducerSerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField()
     class Meta:
         model = Producer
-        fields = ('name', 'person', 'brand_name')
+        fields = ('name', 'person', 'brand_name', 'person_id')

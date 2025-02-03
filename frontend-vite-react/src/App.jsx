@@ -15,6 +15,7 @@ import Layout from "./components/Layout";
 import AuthPage from "./pages/AuthPage";
 import { UserProvider } from "./pages/UserContext";
 import LogoutPage from "./pages/LogoutPage";
+import Page from "@/app/dashboard/page";
 import "./App.css";
 
 const router = createBrowserRouter([
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
       { path: "/cut-list", element: <CutList /> },
       { path: "/login", element: <AuthPage /> },
       { path: "/logout", element: <LogoutPage /> },
+      { path: "/sidebar", element: <Page /> },
       { path: "*", element: <PageNotFound /> },
     ],
   },

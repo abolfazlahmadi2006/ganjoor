@@ -14,6 +14,7 @@ import {
   CurrencyDollarIcon,
   CreditCardIcon,
   DocumentCurrencyDollarIcon,
+  UsersIcon,
 } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
 
@@ -29,7 +30,7 @@ const navigation = [
   },
   {
     name: "پرسنل",
-    icon: UserCircleIcon,
+    icon: UsersIcon,
     subparts: [
       { name: "استخدادم نیرو جدید", href: "#", icon: UserPlusIcon },
       { name: "لیست پرسنل", href: "#", icon: UserGroupIcon },
@@ -154,7 +155,7 @@ export default function SidebarLg() {
           {!user && (
             <Link
               to="/login/"
-              className=" flex border-[1px] mx-4 mb-8 border-gray-200  p-2 text-gray-900 rounded-lg dark:text-white bg-gray-100 dark:bg-gray-700"
+              className=" flex border-[1px] mx-4 mb-8 border-gray-200 p-2 text-gray-900 rounded-lg dark:text-white bg-gray-100 dark:bg-gray-700"
             >
               وارد شوید
             </Link>
@@ -162,9 +163,10 @@ export default function SidebarLg() {
           {user && (
             <div
               to="/login/"
-              className="flex border-[1px]  border-gray-200   p-2 text-gray-900 rounded-lg dark:text-white bg-gray-100 dark:bg-gray-700"
+              className=" flex border-[1px] mx-4 mb-8 border-gray-200 p-2 text-gray-900 rounded-lg dark:text-white bg-gray-100 dark:bg-gray-700"
             >
-              {user.username}
+              <UserCircleIcon className="h-6 ml-2" aria-hidden="true" />
+              <div>{user.username}</div>
             </div>
           )}
         </div>

@@ -1,24 +1,55 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Trash2, SquarePen, FileText } from "lucide-react";
+import {
+  EllipsisVerticalIcon,
   EllipsisHorizontalIcon,
   ArrowDownIcon,
   ArrowUpIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
 import { numberToPersian } from "../utils/numberToPersian";
 
 const CutList = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [cuts, setCuts] = useState([]);
+  const [selectedCutId, setSelectedCutId] = useState(null);
+
   const [owners, setOwners] = useState([]);
   const [selectedOwner, setSelectedOwner] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [sortOrder, setSortOrder] = useState("dest");
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchCuts = async (owner = "", page = 1, query = "") => {
       try {
@@ -52,7 +83,20 @@ const CutList = () => {
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === "asc" ? "dest" : "asc");
   };
-
+  const handleDeleteCut = async () => {
+    try {
+      // await axios.delete(`${API_BASE_URL}cut-update/${selectedCutId}/`);
+      setCuts((prevCuts) =>
+        prevCuts.filter((cut) => cut.cut_code !== selectedCutId)
+      );
+      setSelectedCutId(null); // Reset the selected cut ID
+      toast("با موفقیت حذف شد", {
+        description: "برش " + selectedCutId + " با موفقیت از سیستم حذف شد",
+      });
+    } catch (error) {
+      console.error("Error deleting cut:", error);
+    }
+  };
   const handleOwnerChange = (e) => {
     setSelectedOwner(e.target.value);
     setCurrentPage(1); // Reset to first page when owner changes
@@ -124,6 +168,7 @@ const CutList = () => {
                 <th scope="col" className="whitespace-nowrap text-center">
                   تعداد طاقه‌ها
                 </th>
+                <td></td>
               </tr>
             </thead>
             <tbody>
@@ -141,20 +186,75 @@ const CutList = () => {
                   </td>
                   <td className="whitespace-nowrap">{cut.model_name}</td>
                   <td className="text-center whitespace-nowrap">
-                    <button
-                      onClick={() =>
-                        window.open(`/cut-detail/${cut.cut_code}`, "_blank")
-                      }
-                    >
-                      {cut.cut_code}
-                    </button>
+                    {cut.cut_code}
                   </td>
                   <td className="whitespace-nowrap">
                     {numberToPersian(cut.create_date)}
                   </td>
-                  <td className="text-center whitespace-nowrap">{cut.owner}</td>
+                  <td className="text-center whitespace-nowrap">
+                    {cut.owner_name}
+                  </td>
                   <td className="text-center w-24 whitespace-nowrap">
                     {numberToPersian(cut.number_of_rolls)}
+                  </td>
+                  <td>
+                    <Dialog>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger>
+                          <EllipsisHorizontalIcon className="h-6" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent side="right" align="start">
+                          <DropdownMenuItem className="flex flex-row-reverse">
+                            <FileText />
+                            <span
+                              onClick={() =>
+                                navigate(`/cut-detail/${cut.cut_code}`)
+                              }
+                            >
+                              مشاهده
+                            </span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="flex flex-row-reverse">
+                            <SquarePen />
+                            <span
+                              onClick={() =>
+                                navigate(`/cut-update/${cut.cut_code}`)
+                              }
+                            >
+                              ویرایش
+                            </span>{" "}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="flex flex-row-reverse ">
+                            <Trash2 className="text-red-500" />
+                            <DialogTrigger asChild>
+                              <span
+                                className="text-red-500"
+                                onClick={() => setSelectedCutId(cut.cut_code)}
+                              >
+                                حذف
+                              </span>
+                            </DialogTrigger>{" "}
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle className="text-right pr-4">
+                            آیا واقعا مطمئن هستید؟
+                          </DialogTitle>
+                          <DialogDescription className="text-right pr-4">
+                            این اقدام قابل بازگشت نیست. آیا مطمئن هستید که
+                            می‌خواهید این برش را به‌طور دائمی از سیستم حذف کنید؟
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <Button type="button" onClick={handleDeleteCut}>
+                            تأیید
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                   </td>
                 </tr>
               ))}

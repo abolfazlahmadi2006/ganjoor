@@ -13,12 +13,15 @@ class Person(models.Model):
     def __str__(self) -> str:
         return self.name
     
+    def __repr__(self) -> str:
+        return self.name
+    
 class Producer(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE, primary_key=True)
     brand_name = models.CharField(max_length=100)
 
     def __str__(self) -> str:
-        return self.person.name
+        return str(self.person.id)
     
     @property
     def name(self):
@@ -94,8 +97,11 @@ class Cut(models.Model):
     def total_margin(self):
         cut_margin = self.cut_margin
         sew_margin = self.sew_margin
-        print(f"cut_margin: {cut_margin}, sew_margin: {sew_margin}")
         return cut_margin + sew_margin
+    
+    @property
+    def owner_name(self):
+        return self.owner.name
 
     
     class Mete:

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import { useUser } from "./UserContext";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { EllipsisHorizontalCircleIcon } from "@heroicons/react/24/outline";
 
 const CutUpdate = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const { cutId } = useParams();
+  const { user } = useUser();
   const [producers, setProducers] = useState([]);
   const [cutData, setCutData] = useState({
     cut_code: "",
@@ -52,6 +54,7 @@ const CutUpdate = () => {
         const response = await axios.get(`${API_BASE_URL}cut-detail/${cutId}/`);
         setCutData(response.data);
         setRolls(response.data.rolls);
+        console.log("Cut Data:", response.data);
       } catch (error) {
         console.error("Error fetching cut detail:", error);
       }
@@ -95,7 +98,7 @@ const CutUpdate = () => {
     // Validate and format the data
     const formattedRolls = rolls.map((roll) => ({
       ...roll,
-      products: parseInt(roll.products, 10),
+      products: roll.products || roll.layers * cutData.product_per_layer,
       length: parseFloat(roll.length),
       layers: parseInt(roll.layers, 10),
     }));
@@ -224,22 +227,24 @@ const CutUpdate = () => {
             value={cutData.length_of_layers}
             onChange={handleCutChange}
           />
-
-          <input
-            type="text"
-            name="cutting_price"
-            placeholder="قیمت برش"
-            value={cutData.cutting_price}
-            onChange={handleCutChange}
-          />
-
-          <input
-            type="text"
-            name="cutting_price_raw"
-            placeholder="قیمت برش خام"
-            value={cutData.cutting_price_raw}
-            onChange={handleCutChange}
-          />
+          {user?.is_superuser && (
+            <input
+              type="text"
+              name="cutting_price"
+              placeholder="قیمت برش"
+              value={cutData.cutting_price}
+              onChange={handleCutChange}
+            />
+          )}
+          {user?.is_superuser && (
+            <input
+              type="text"
+              name="cutting_price_raw"
+              placeholder="قیمت برش خام"
+              value={cutData.cutting_price_raw}
+              onChange={handleCutChange}
+            />
+          )}
         </div>
       </div>
       {/* cutting_price */}
@@ -371,20 +376,22 @@ const CutUpdate = () => {
               <td></td>
               <td className="w-10 border-0"></td>
             </tr>
-            <tr
-              className="even:bg-white odd:dark:bg-gray-900 odd:bg-stone-100 even:dark:bg-gray-800 "
-              key="total"
-            >
-              <th className="text-center py-3 w-1 border-l dark:border-gray-700 font-medium text-gray-900 whitespace-nowrap dark:text-white"></th>
-              <td>
-                <p className="py-1.5">مبلغ کل</p>
-              </td>
-              <td></td>
-              <td className="text-center">{cutData.cut_margin}</td>
-              <td className="text-center">{cutData.cutting_price}</td>
-              <td></td>
-              <td className="w-10 border-0"></td>
-            </tr>
+            {user?.is_superuser && (
+              <tr
+                className="even:bg-white odd:dark:bg-gray-900 odd:bg-stone-100 even:dark:bg-gray-800 "
+                key="total"
+              >
+                <th className="text-center py-3 w-1 border-l dark:border-gray-700 font-medium text-gray-900 whitespace-nowrap dark:text-white"></th>
+                <td>
+                  <p className="py-1.5">مبلغ کل</p>
+                </td>
+                <td></td>
+                <td className="text-center">{cutData.cut_margin}</td>
+                <td className="text-center">{cutData.cutting_price}</td>
+                <td></td>
+                <td className="w-10 border-0"></td>
+              </tr>
+            )}
           </table>
         </div>
       </div>

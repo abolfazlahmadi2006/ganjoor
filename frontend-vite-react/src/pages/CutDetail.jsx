@@ -23,6 +23,8 @@ const CutDetail = () => {
     fetchCutDetail();
   }, [cutId]);
 
+
+
   if (!cut) {
     return <div>Loading...</div>;
   }
