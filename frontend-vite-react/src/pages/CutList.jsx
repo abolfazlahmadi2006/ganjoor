@@ -85,7 +85,7 @@ const CutList = () => {
   };
   const handleDeleteCut = async () => {
     try {
-      // await axios.delete(`${API_BASE_URL}cut-update/${selectedCutId}/`);
+      await axios.delete(`${API_BASE_URL}cut-update/${selectedCutId}/`);
       setCuts((prevCuts) =>
         prevCuts.filter((cut) => cut.cut_code !== selectedCutId)
       );
